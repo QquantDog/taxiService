@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./tomcatFile
+    container_name: taxi_server
+    ports:
+      - "9000:8080"
+    volumes:
+      - ./main/target/exploded:/usr/local/tomcat/webapps/ROOT
+    environment:
+      - CATALINA_OPTS=-Xms512M -Xmx1024M
+    networks:
+      - pg-taxi-network
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: taxi_db
+    environment:
+      POSTGRES_USER: default
+      POSTGRES_PASSWORD: default
+      POSTGRES_DB: taxi_db_test
+    ports:
+      - "8066:5432"
+    volumes:
+      - postgres-taxi-data:/var/lib/postgresql/data
+    networks:
+      - pg-taxi-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: taxi_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: default@example.com
+      PGADMIN_DEFAULT_PASSWORD: default
+    ports:
+      - "8089:80"
+    volumes:
+      - pgadmin-taxi-volume:/var/lib/pgadmin
+    networks:
+      - pg-taxi-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-taxi-data:
+  pgadmin-taxi-volume:
+
+networks:
+  pg-taxi-network:

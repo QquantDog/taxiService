@@ -1,0 +1,12 @@
+{
+  "city_id": 2,
+  "driver_id": 5,
+  "cab_id": 2,
+  "shift_start_point": {
+    "type": "Point",
+    "coordinates": [
+      41.999,
+      23.999
+    ]
+  }
+}
